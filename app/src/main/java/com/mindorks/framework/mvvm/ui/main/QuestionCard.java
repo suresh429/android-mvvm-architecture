@@ -17,12 +17,8 @@
 package com.mindorks.framework.mvvm.ui.main;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.transition.Visibility;
 
 import com.androidnetworking.widget.ANImageView;
 import com.mindorks.framework.mvvm.R;
@@ -41,6 +37,15 @@ import com.mindorks.placeholderview.annotations.View;
 @NonReusable
 @Layout(R.layout.card_layout)
 public class QuestionCard {
+
+    private static final String TAG = "QuestionCard1";
+    MainViewModel mainViewModel;
+
+    int attempt = 0;
+    int wrong = 0;
+    int correct = 0;
+    String value = "";
+
 
     @View(R.id.btn_option_1)
     private Button mOption1Button;
@@ -68,29 +73,40 @@ public class QuestionCard {
 
     @Click(R.id.btn_option_1)
     public void onOption1Click() {
-        showCorrectOptions();
+
+        value = mOption1Button.getText().toString();
+        showCorrectOptions(value);
+
+
     }
 
     @Click(R.id.btn_option_2)
     public void onOption2Click() {
-        showCorrectOptions();
+        value = mOption2Button.getText().toString();
+        showCorrectOptions(value);
+
     }
 
     @Click(R.id.btn_option_3)
     public void onOption3Click() {
-        showCorrectOptions();
+        value = mOption3Button.getText().toString();
+        showCorrectOptions(value);
+
     }
 
     @Click(R.id.btn_option_4)
     public void onOption4Click() {
-        showCorrectOptions();
+        value = mOption4Button.getText().toString();
+        showCorrectOptions(value);
+
     }
+
 
     @Resolve
     private void onResolved() {
         mQuestionTextView.setText(mQuestionCardData.question.questionText);
         if (mQuestionCardData.mShowCorrectOptions) {
-            showCorrectOptions();
+            showCorrectOptions(value);
         }
 
         for (int i = 0; i < 4; i++) {
@@ -112,9 +128,9 @@ public class QuestionCard {
             }
 
 
-            if (mQuestionCardData.options.size()==4){
+            if (mQuestionCardData.options.size() == 4) {
                 mOption4Button.setVisibility(android.view.View.VISIBLE);
-            }else {
+            } else {
                 mOption4Button.setVisibility(android.view.View.GONE);
             }
 
@@ -131,35 +147,53 @@ public class QuestionCard {
         }
     }
 
-    private void showCorrectOptions() {
+
+    private void showCorrectOptions(String value) {
         mQuestionCardData.mShowCorrectOptions = true;
+
+
         for (int i = 0; i < 4; i++) {
             Option option = mQuestionCardData.options.get(i);
             Button button = null;
             switch (i) {
                 case 0:
                     button = mOption1Button;
+
                     break;
                 case 1:
                     button = mOption2Button;
+
+
                     break;
                 case 2:
                     button = mOption3Button;
+
                     break;
                 case 3:
                     button = mOption4Button;
+
                     break;
             }
+
             if (button != null) {
-                if (option.isCorrect) {
-                    button.setBackgroundColor(Color.GREEN);
-                    Log.d("TAG", "showCorrectOptions: "+option.isCorrect);
-                } else {
-                    button.setBackgroundColor(Color.RED);
+
+
+                if (value.equalsIgnoreCase(option.optionText)) {
+                    if (option.isCorrect) {
+                        button.setBackgroundColor(Color.GREEN);
+                    } else {
+                        button.setBackgroundColor(Color.RED);
+
+                    }
                 }
+
+
             }
 
 
         }
+
     }
+
+
 }

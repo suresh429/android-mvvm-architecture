@@ -16,28 +16,29 @@
 
 package com.mindorks.framework.mvvm.ui.main;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import com.google.android.material.navigation.NavigationView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.google.android.material.navigation.NavigationView;
 import com.mindorks.framework.mvvm.BR;
-
 import com.mindorks.framework.mvvm.R;
 import com.mindorks.framework.mvvm.ViewModelProviderFactory;
 import com.mindorks.framework.mvvm.databinding.ActivityMainBinding;
@@ -51,10 +52,12 @@ import com.mindorks.framework.mvvm.utils.ScreenUtils;
 import com.mindorks.placeholderview.BuildConfig;
 import com.mindorks.placeholderview.SwipeDecor;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
+
+import javax.inject.Inject;
+
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
-import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> implements MainNavigator, HasSupportFragmentInjector {
 
@@ -218,7 +221,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         subscribeToLiveData();
     }
 
+
     private void setupCardContainerView() {
+        final int[] attempt = {0};
         int screenWidth = ScreenUtils.getScreenWidth(this);
         int screenHeight = ScreenUtils.getScreenHeight(this);
 
@@ -235,16 +240,51 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
         mCardsContainerView.addItemRemoveListener(count -> {
             if (count == 0) {
+                attempt[0] = 0;
                 // reload the contents again after 1 sec delay
                 new Handler(getMainLooper()).postDelayed(() -> {
-                    //Reload once all the cards are removed
+                //Reload once all the cards are removed
                     mMainViewModel.loadQuestionCards();
                 }, 800);
             } else {
                 mMainViewModel.removeQuestionCard();
+                Toast.makeText(getBaseContext(),"Card Removed",Toast.LENGTH_SHORT).show();
+                attempt[0]++;
+                String x = String.valueOf(attempt[0]);
+                txtAttempt.setText("Attempt: "+x);
             }
         });
     }
+
+    /*private void setupCardContainerView() {
+        int screenWidth = ScreenUtils.getScreenWidth(this);
+        int screenHeight = ScreenUtils.getScreenHeight(this);
+
+        mCardsContainerView.getBuilder()
+                .setDisplayViewCount(3)
+                .setHeightSwipeDistFactor(10)
+                .setWidthSwipeDistFactor(5)
+                .setSwipeDecor(new SwipeDecor()
+                        .setViewWidth((int) (0.90 * screenWidth))
+                        .setViewHeight((int) (0.75 * screenHeight))
+                        .setPaddingTop(20)
+                        .setSwipeRotationAngle(10)
+                        .setRelativeScale(0.01f));
+
+        mCardsContainerView.addItemRemoveListener(count -> {
+
+            Log.d("TAG", "setupCardContainerView: "+count);
+            if (count == 0) {
+                // reload the contents again after 1 sec delay
+                new Handler(getMainLooper()).postDelayed(() -> {
+                    //Reload once all the cards are removed
+                    mMainViewModel.loadQuestionCards();
+                }, 8000);
+            } else {
+                mMainViewModel.removeQuestionCard();
+            }
+        });
+    }*/
 
     private void setupNavMenu() {
         NavHeaderMainBinding navHeaderMainBinding = DataBindingUtil.inflate(getLayoutInflater(),

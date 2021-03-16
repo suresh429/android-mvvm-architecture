@@ -52,12 +52,22 @@ public class MainViewModel extends BaseViewModel<MainNavigator> {
 
     private final ObservableField<String> userProfilePicUrl = new ObservableField<>();
 
+    private MutableLiveData<String> attemptedCount = new MutableLiveData<>();
+
     private int action = NO_ACTION;
 
     public MainViewModel(DataManager dataManager, SchedulerProvider schedulerProvider) {
         super(dataManager, schedulerProvider);
         questionCardData = new MutableLiveData<>();
+        attemptedCount.setValue("0");
         loadQuestionCards();
+    }
+
+   /* public MutableLiveData<String> setAttemptedCount(){
+        return attemptedCount;
+    }*/
+    public MutableLiveData<String> getAttemptedCount() {
+        return attemptedCount;
     }
 
     public int getAction() {
