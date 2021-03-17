@@ -78,30 +78,75 @@
                         android:weightSum="3"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/txtAttempted"
-                            android:layout_weight="1"
-                            android:text="Attempted : "
-                            android:padding="5dp"/>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/txtCorrect"
-                            android:layout_weight="1"
-                            android:text="Correct : "
-                            android:padding="5dp"/>
+                            android:orientation="vertical"
+                            android:layout_weight="1">
 
-                        <TextView
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Attempted : "
+                                android:gravity="center"
+                                android:padding="5dp"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/txtAttempted"
+                                android:gravity="center"
+                                android:text="----"
+                                android:padding="5dp"/>
+                        </LinearLayout>
+
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/txtWrong"
-                            android:layout_weight="1"
-                            android:text="Wrong : "
-                            android:padding="5dp"/>
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Correct : "
+                                android:padding="5dp"
+                                android:gravity="center"/>
+
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/txtCorrect"
+                                android:text="----"
+                                android:gravity="center"
+                                android:padding="5dp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                               android:gravity="center"
+                                android:text="Wrong : "
+                                android:padding="5dp"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/txtWrong"
+                               android:gravity="center"
+                                android:text="----"
+                                android:padding="5dp"/>
+                        </LinearLayout>
 
                     </LinearLayout>
+
                     <com.mindorks.placeholderview.SwipePlaceHolderView
                         android:id="@+id/cardsContainer"
                         android:layout_width="match_parent"

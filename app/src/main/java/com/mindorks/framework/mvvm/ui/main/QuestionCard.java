@@ -17,7 +17,6 @@
 package com.mindorks.framework.mvvm.ui.main;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -39,7 +38,7 @@ import com.mindorks.placeholderview.annotations.View;
 @Layout(R.layout.card_layout)
 public class QuestionCard {
     int type;
-    int correct = 0;
+
     @View(R.id.btn_option_1)
     private Button mOption1Button;
 
@@ -134,7 +133,8 @@ public class QuestionCard {
     }
 
     private void showCorrectOptions() {
-        int count = 0;
+
+
         mQuestionCardData.mShowCorrectOptions = true;
         for (int i = 0; i < 4; i++) {
             Option option = mQuestionCardData.options.get(i);
@@ -142,28 +142,25 @@ public class QuestionCard {
             switch (i) {
                 case 0:
                     button = mOption1Button;
-                    System.out.println("BUtton 1 clicked");
                     break;
                 case 1:
                     button = mOption2Button;
-                    System.out.println("BUtton 2 clicked");
                     break;
                 case 2:
                     button = mOption3Button;
-                    System.out.println("BUtton 3 clicked");
                     break;
                 case 3:
                     button = mOption4Button;
                     break;
             }
+
+
             if (button != null) {
                 if (option.isCorrect) {
                     button.setBackgroundColor(Color.GREEN);
-                    count++;
-                    System.out.println("option correct " + i);
+
                     if (type == i) {
-                        correct++;
-                        System.out.println("Dadi Attempted corect value " + correct);
+
                         int x;
                         if (MainActivity.txtCorrect.getText().toString().length() > 2) {
                             x = 0;
@@ -173,13 +170,40 @@ public class QuestionCard {
                             x++;
                         }
                         String xy = String.valueOf(x);
-                        MainActivity.txtCorrect.setText("Correct : "+xy);
+                        MainActivity.txtCorrect.setText(xy);
                     }
-                    Log.d("TAG", "showCorrectOptions: " + option.isCorrect);
                 } else {
                     button.setBackgroundColor(Color.RED);
+
+                    if (type == i) {
+
+                        int y;
+                        if (MainActivity.txtWrong.getText().toString().length() > 2) {
+                            y = 0;
+                            y++;
+                        } else {
+                            y = Integer.parseInt(MainActivity.txtWrong.getText().toString());
+                            y++;
+                        }
+                        String yz = String.valueOf(y);
+                        MainActivity.txtWrong.setText(yz);
+                    }
+
                 }
-                System.out.println("Dadi Attempted " + count);
+
+                if (type == i) {
+
+                    int z;
+                    if (MainActivity.txtAttempt.getText().toString().length() > 2) {
+                        z = 0;
+                        z++;
+                    } else {
+                        z = Integer.parseInt(MainActivity.txtAttempt.getText().toString());
+                        z++;
+                    }
+                    String zz = String.valueOf(z);
+                    MainActivity.txtAttempt.setText(zz);
+                }
             }
 
         }

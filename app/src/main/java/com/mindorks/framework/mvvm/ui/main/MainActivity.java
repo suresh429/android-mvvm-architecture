@@ -27,7 +27,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
@@ -62,6 +61,7 @@ import dagger.android.support.HasSupportFragmentInjector;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> implements MainNavigator, HasSupportFragmentInjector {
 
+
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentDispatchingAndroidInjector;
     @Inject
@@ -72,10 +72,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     private MainViewModel mMainViewModel;
     private NavigationView mNavigationView;
     private Toolbar mToolbar;
-    public TextView txtAttempt;
+    public static TextView txtAttempt;
     @SuppressLint("StaticFieldLeak")
     public static TextView txtCorrect;
-    public TextView txtWrong;
+    public static TextView txtWrong;
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -227,7 +227,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
 
     private void setupCardContainerView() {
-        final int[] attempt = {0};
+
         int screenWidth = ScreenUtils.getScreenWidth(this);
         int screenHeight = ScreenUtils.getScreenHeight(this);
 
@@ -244,51 +244,22 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
         mCardsContainerView.addItemRemoveListener(count -> {
             if (count == 0) {
-                attempt[0] = 0;
+
                 // reload the contents again after 1 sec delay
                 new Handler(getMainLooper()).postDelayed(() -> {
                 //Reload once all the cards are removed
                     mMainViewModel.loadQuestionCards();
+                    txtWrong.setText("----");
+                    txtCorrect.setText("----");
+                    txtAttempt.setText("----");
                 }, 800);
             } else {
                 mMainViewModel.removeQuestionCard();
-                Toast.makeText(getBaseContext(),"Card Removed",Toast.LENGTH_SHORT).show();
-                attempt[0]++;
-                String x = String.valueOf(attempt[0]);
-                txtAttempt.setText("Attempt: "+x);
+
             }
         });
     }
 
-    /*private void setupCardContainerView() {
-        int screenWidth = ScreenUtils.getScreenWidth(this);
-        int screenHeight = ScreenUtils.getScreenHeight(this);
-
-        mCardsContainerView.getBuilder()
-                .setDisplayViewCount(3)
-                .setHeightSwipeDistFactor(10)
-                .setWidthSwipeDistFactor(5)
-                .setSwipeDecor(new SwipeDecor()
-                        .setViewWidth((int) (0.90 * screenWidth))
-                        .setViewHeight((int) (0.75 * screenHeight))
-                        .setPaddingTop(20)
-                        .setSwipeRotationAngle(10)
-                        .setRelativeScale(0.01f));
-
-        mCardsContainerView.addItemRemoveListener(count -> {
-
-            Log.d("TAG", "setupCardContainerView: "+count);
-            if (count == 0) {
-                // reload the contents again after 1 sec delay
-                new Handler(getMainLooper()).postDelayed(() -> {
-                    //Reload once all the cards are removed
-                    mMainViewModel.loadQuestionCards();
-                }, 8000);
-            } else {
-                mMainViewModel.removeQuestionCard();
-            }
-        });
-    }*/
 
     private void setupNavMenu() {
         NavHeaderMainBinding navHeaderMainBinding = DataBindingUtil.inflate(getLayoutInflater(),
