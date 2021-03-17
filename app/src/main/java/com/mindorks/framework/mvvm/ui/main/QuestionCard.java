@@ -17,6 +17,7 @@
 package com.mindorks.framework.mvvm.ui.main;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -37,16 +38,8 @@ import com.mindorks.placeholderview.annotations.View;
 @NonReusable
 @Layout(R.layout.card_layout)
 public class QuestionCard {
-
-    private static final String TAG = "QuestionCard1";
-    MainViewModel mainViewModel;
-
-    int attempt = 0;
-    int wrong = 0;
+    int type;
     int correct = 0;
-    String value = "";
-
-
     @View(R.id.btn_option_1)
     private Button mOption1Button;
 
@@ -73,40 +66,33 @@ public class QuestionCard {
 
     @Click(R.id.btn_option_1)
     public void onOption1Click() {
-
-        value = mOption1Button.getText().toString();
-        showCorrectOptions(value);
-
-
+        type = 0;
+        showCorrectOptions();
     }
 
     @Click(R.id.btn_option_2)
     public void onOption2Click() {
-        value = mOption2Button.getText().toString();
-        showCorrectOptions(value);
-
+        type = 1;
+        showCorrectOptions();
     }
 
     @Click(R.id.btn_option_3)
     public void onOption3Click() {
-        value = mOption3Button.getText().toString();
-        showCorrectOptions(value);
-
+        type = 2;
+        showCorrectOptions();
     }
 
     @Click(R.id.btn_option_4)
     public void onOption4Click() {
-        value = mOption4Button.getText().toString();
-        showCorrectOptions(value);
-
+        type = 3;
+        showCorrectOptions();
     }
-
 
     @Resolve
     private void onResolved() {
         mQuestionTextView.setText(mQuestionCardData.question.questionText);
         if (mQuestionCardData.mShowCorrectOptions) {
-            showCorrectOptions(value);
+            showCorrectOptions();
         }
 
         for (int i = 0; i < 4; i++) {
@@ -147,53 +133,55 @@ public class QuestionCard {
         }
     }
 
-
-    private void showCorrectOptions(String value) {
+    private void showCorrectOptions() {
+        int count = 0;
         mQuestionCardData.mShowCorrectOptions = true;
-
-
         for (int i = 0; i < 4; i++) {
             Option option = mQuestionCardData.options.get(i);
             Button button = null;
             switch (i) {
                 case 0:
                     button = mOption1Button;
-
+                    System.out.println("BUtton 1 clicked");
                     break;
                 case 1:
                     button = mOption2Button;
-
-
+                    System.out.println("BUtton 2 clicked");
                     break;
                 case 2:
                     button = mOption3Button;
-
+                    System.out.println("BUtton 3 clicked");
                     break;
                 case 3:
                     button = mOption4Button;
-
                     break;
             }
-
             if (button != null) {
-
-
-                if (value.equalsIgnoreCase(option.optionText)) {
-                    if (option.isCorrect) {
-                        button.setBackgroundColor(Color.GREEN);
-                    } else {
-                        button.setBackgroundColor(Color.RED);
-
+                if (option.isCorrect) {
+                    button.setBackgroundColor(Color.GREEN);
+                    count++;
+                    System.out.println("option correct " + i);
+                    if (type == i) {
+                        correct++;
+                        System.out.println("Dadi Attempted corect value " + correct);
+                        int x;
+                        if (MainActivity.txtCorrect.getText().toString().length() > 2) {
+                            x = 0;
+                            x++;
+                        } else {
+                            x = Integer.parseInt(MainActivity.txtCorrect.getText().toString());
+                            x++;
+                        }
+                        String xy = String.valueOf(x);
+                        MainActivity.txtCorrect.setText("Correct : "+xy);
                     }
+                    Log.d("TAG", "showCorrectOptions: " + option.isCorrect);
+                } else {
+                    button.setBackgroundColor(Color.RED);
                 }
-
-
+                System.out.println("Dadi Attempted " + count);
             }
 
-
         }
-
     }
-
-
 }

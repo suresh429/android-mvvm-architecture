@@ -16,6 +16,7 @@
 
 package com.mindorks.framework.mvvm.ui.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
@@ -71,7 +72,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     private MainViewModel mMainViewModel;
     private NavigationView mNavigationView;
     private Toolbar mToolbar;
-    private TextView txtAttempt,txtCorrect,txtWrong;
+    public TextView txtAttempt;
+    @SuppressLint("StaticFieldLeak")
+    public static TextView txtCorrect;
+    public TextView txtWrong;
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
